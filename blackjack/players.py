@@ -1,7 +1,14 @@
-from typing import List
+from typing import List, Dict
+from enum import Enum
+from dataclasses import dataclass
 
 from .hand import Hand
 from .deck import Deck
+from .card import Card
+
+class Action(Enum):
+    HIT = 0
+    STAND = 1
 
 class BasePlayer:
     def __init__(self) -> None:
@@ -65,10 +72,12 @@ class Player(BasePlayer):
             raise ValueError("Invalid action")
 
 class RecursivePlayer(BasePlayer):
-    def __init__(self, chosen_total: int, hand: Hand) -> None:
-        super().__init__()
+    def __init__(self, chosen_total: int, hand: Hand, actions_taken: List[Dict[str, Action | int]] = [], playing: bool = True) -> None:
+        #super().__init__()
         self.chosen_total = chosen_total
         self.hand = hand
+        self.actions_taken = actions_taken
+        self.playing = playing
         
     @property
     def total(self) -> int:
@@ -77,6 +86,27 @@ class RecursivePlayer(BasePlayer):
     @property
     def possible_totals(self) -> List[int]:
         return self.hand.possible_totals
+    
+    
+    def hit(self, new_card: Card) -> None:
+        self.hand.add_card(new_card)
+        self.actions_taken.append({
+            "action": Action.HIT,
+            "total": self.chosen_total,
+            "reward": 0 # TBD
+        })
+        
+        self.playing = min(self.hand.possible_totals) < 21
+            
+        
+    def stand(self) -> None:
+        self.playing = False
+        
+        self.actions_taken.append({
+            "action": Action.STAND,
+            "total": self.chosen_total,
+            "reward": 0 # TBD
+        })
         
         
     

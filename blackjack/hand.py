@@ -25,3 +25,4 @@ class Hand:
     
     def add_card(self, card: Card):
         self.cards.append(card)
+        return card
