@@ -52,7 +52,11 @@ class Dealer(BasePlayer):
     
     @property
     def total(self) -> int:
-        return max(self.hand.possible_totals)
+        not_busted = [total for total in self.hand.possible_totals if total <= 21]
+        if len(not_busted) == 0:
+            return min(self.hand.possible_totals)
+        else:
+            return self.hand.possible_totals[self.hand.possible_totals.index(max(not_busted))]
         
     
 
@@ -73,7 +77,7 @@ class Player(BasePlayer):
 
 class RecursivePlayer(BasePlayer):
     def __init__(self, chosen_total: int, hand: Hand, actions_taken: List[Dict[str, Action | int]] = [], playing: bool = True) -> None:
-        #super().__init__()
+        super().__init__()
         self.chosen_total = chosen_total
         self.hand = hand
         self.actions_taken = actions_taken
@@ -90,9 +94,18 @@ class RecursivePlayer(BasePlayer):
     
     def hit(self, new_card: Card) -> None:
         self.hand.add_card(new_card)
+        
+        not_busted = [total for total in self.hand.possible_totals if total <= 21]
+        new_best_total = self.chosen_total
+        if len(not_busted) == 0:
+            new_best_total = min(self.hand.possible_totals)
+        else: 
+            new_best_total = self.hand.possible_totals[self.hand.possible_totals.index(max(not_busted))]
+        
         self.actions_taken.append({
             "action": Action.HIT,
             "total": self.chosen_total,
+            "new_total": new_best_total,
             "reward": 0 # TBD
         })
         
@@ -105,6 +118,7 @@ class RecursivePlayer(BasePlayer):
         self.actions_taken.append({
             "action": Action.STAND,
             "total": self.chosen_total,
+            "new_total": self.chosen_total,
             "reward": 0 # TBD
         })
         
