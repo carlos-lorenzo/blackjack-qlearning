@@ -14,7 +14,10 @@ class BasePlayer:
     def __init__(self) -> None:
         self.hand = Hand()
         self.playing: bool = True
-        
+    
+    
+    def __hash__(self) -> int:
+        return id(self)
     def hit(self, deck: Deck) -> None:
         self.hand.add_card(deck.draw())
         
@@ -64,6 +67,7 @@ class Player(BasePlayer):
     def __init__(self) -> None:
         super().__init__()
         # self.bet = 0
+        
         
     def play(self, action: str, deck: Deck) -> None:
         if action.lower()[0] == "h":
