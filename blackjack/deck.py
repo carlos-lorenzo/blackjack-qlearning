@@ -10,12 +10,17 @@ class Deck:
     
     def __post_init__(self) -> None:
         for suit in Suit:
-            for name, value in values.items():
-                self.cards.append(Card(suit, Value(name, value)))
+            for value in values.values():
+                
+                self.cards.append(Card(suit, value))
         self.shuffle()
         
     def __len__(self) -> int:
         return len(self.cards)
+    
+    def reset(self):
+        self.cards = []
+        self.__post_init__()
     
     def shuffle(self):
         import random

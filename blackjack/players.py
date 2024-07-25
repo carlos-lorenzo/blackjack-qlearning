@@ -1,14 +1,5 @@
-from typing import List, Dict
-from enum import Enum
-from dataclasses import dataclass
-
 from .hand import Hand
 from .deck import Deck
-from .card import Card
-
-class Action(Enum):
-    HIT = 0
-    STAND = 1
 
 class BasePlayer:
     def __init__(self) -> None:
@@ -18,10 +9,11 @@ class BasePlayer:
     
     def __hash__(self) -> int:
         return id(self)
+    
     def hit(self, deck: Deck) -> None:
         self.hand.add_card(deck.draw())
         
-        self.playing = min([total for total in self.hand.possible_totals]) < 21
+        self.playing = self.hand.total < 21
             
         
     def stand(self) -> None:
@@ -31,101 +23,64 @@ class BasePlayer:
         self.hand = Hand()
     
     def display_hand(self) -> None:
-        for total in self.hand.possible_totals:
-            print(f"{self.hand} - Total: {total}")
-
+        print(f"{self.hand} - Total: {self.hand.total}")
+        
+        
 class Dealer(BasePlayer):
     def __init__(self) -> None:
         super().__init__()
-
     
-    def play(self, deck: Deck) -> None:
-        while max(self.hand.possible_totals) < 17:
-            self.hit(deck)
-        self.stand()
-        
-        
-    
-    def display_hand_partial(self) -> None:
-        print(f"{self.hand.cards[0]} - Total: ???")
-        
     @property
     def partial_total(self) -> int:
         return self.hand.cards[0].value.value[0]
     
-    @property
-    def total(self) -> int:
-        not_busted = [total for total in self.hand.possible_totals if total <= 21]
-        if len(not_busted) == 0:
-            return min(self.hand.possible_totals)
-        else:
-            return self.hand.possible_totals[self.hand.possible_totals.index(max(not_busted))]
         
+    def play(self, deck: Deck) -> None:
+        while self.hand.total < 17:
+            self.hit(deck)
+        self.stand()
     
+    def display_hand_partial(self) -> None:
+        print(f"{self.hand.cards[0]} - Total: +{self.partial_total}")
+        
 
 class Player(BasePlayer):
     def __init__(self) -> None:
         super().__init__()
-        # self.bet = 0
-        
-        
-    def play(self, action: str, deck: Deck) -> None:
-        if action.lower()[0] == "h":
-            self.hit(deck)
-            
-        elif action.lower()[0] == "s":
-            self.stand()
-            
-        else:
-            raise ValueError("Invalid action")
-
-class RecursivePlayer(BasePlayer):
-    def __init__(self, chosen_total: int, hand: Hand, actions_taken: List[Dict[str, Action | int]] = [], playing: bool = True) -> None:
-        super().__init__()
-        self.chosen_total = chosen_total
-        self.hand = hand
-        self.actions_taken = actions_taken
-        self.playing = playing
-        
-    @property
-    def total(self) -> int:
-        return self.chosen_total
+        self.actions_taken = []
     
-    @property
-    def possible_totals(self) -> List[int]:
-        return self.hand.possible_totals
-    
-    
-    def hit(self, new_card: Card) -> None:
-        self.hand.add_card(new_card)
+    def hit(self, deck: Deck) -> None:
+        initial_total = self.hand.total
+        usable_ace = self.hand.usable_ace
+        self.hand.add_card(deck.draw())
         
-        not_busted = [total for total in self.hand.possible_totals if total <= 21]
-        new_best_total = self.chosen_total
-        if len(not_busted) == 0:
-            new_best_total = min(self.hand.possible_totals)
-        else: 
-            new_best_total = self.hand.possible_totals[self.hand.possible_totals.index(max(not_busted))]
+        self.playing = self.hand.total < 21
         
         self.actions_taken.append({
-            "action": Action.HIT,
-            "total": self.chosen_total,
-            "new_total": new_best_total,
-            "reward": 0 # TBD
+            "action": 0,
+            "total": initial_total,
+            "usable_ace": usable_ace,
+            "new_total": self.hand.total,
+            "reward": 0
         })
-        
-        self.playing = min(self.hand.possible_totals) < 21
-            
         
     def stand(self) -> None:
         self.playing = False
         
         self.actions_taken.append({
-            "action": Action.STAND,
-            "total": self.chosen_total,
-            "new_total": self.chosen_total,
-            "reward": 0 # TBD
+            "action": 1,
+            "total": self.hand.total,
+            "usable_ace": self.hand.usable_ace,
+            "new_total": self.hand.total,
+            "reward": 0
         })
         
+    def play(self, deck: Deck, action: int) -> None:
+        if action == 0:
+            self.hit(deck)
+        elif action == 1:
+            self.stand()
+        else:
+            raise ValueError("Invalid action")
         
     
-        

@@ -25,16 +25,17 @@ class Card:
     
 
 values = OrderedDict()
-values["ACE"] = [1, 11]
-values["TWO"] = [2]
-values["THREE"] = [3]
-values["FOUR"] = [4]
-values["FIVE"] = [5]
-values["SIX"] = [6]
-values["SEVEN"] = [7]
-values["EIGHT"] = [8]
-values["NINE"] = [9]
-values["TEN"] = [10]
-values["JACK"] = [10]
-values["QUEEN"] = [10]
-values["KING"] = [10]
+values["ACE"] = Value("ACE", [1, 11])
+values["TWO"] = Value("TWO", [2])
+values["THREE"] = Value("THREE", [3])
+values["FOUR"] = Value("FOUR", [4])
+values["FIVE"] = Value("FIVE", [5])
+values["SIX"] = Value("SIX", [6])
+values["SEVEN"] = Value("SEVEN", [7])
+values["EIGHT"] = Value("EIGHT", [8])
+values["NINE"] = Value("NINE", [9])
+values["TEN"] = Value("TEN", [10])
+values["JACK"] = Value("JACK", [10])
+values["QUEEN"] = Value("QUEEN", [10])
+values["KING"] = Value("KING", [10])
+
