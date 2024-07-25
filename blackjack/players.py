@@ -49,26 +49,27 @@ class Player(BasePlayer):
         super().__init__()
         self.actions_taken = []
     
-    def hit(self, deck: Deck) -> None:
+    def hit(self, deck: Deck, save_action: bool = True) -> None:
         initial_total = self.hand.total
         usable_ace = self.hand.usable_ace
         self.hand.add_card(deck.draw())
         
         self.playing = self.hand.total < 21
         
-        self.actions_taken.append({
-            "action": 0,
-            "total": initial_total,
-            "usable_ace": usable_ace,
-            "new_total": self.hand.total,
-            "reward": 0
-        })
+        if save_action:
+            self.actions_taken.append({
+                "action": 1,
+                "total": initial_total,
+                "usable_ace": usable_ace,
+                "new_total": self.hand.total,
+                "reward": 0
+            })
         
     def stand(self) -> None:
         self.playing = False
         
         self.actions_taken.append({
-            "action": 1,
+            "action": 0,
             "total": self.hand.total,
             "usable_ace": self.hand.usable_ace,
             "new_total": self.hand.total,
@@ -76,9 +77,9 @@ class Player(BasePlayer):
         })
         
     def play(self, deck: Deck, action: int) -> None:
-        if action == 0:
+        if action == 1:
             self.hit(deck)
-        elif action == 1:
+        elif action == 0:
             self.stand()
         else:
             raise ValueError("Invalid action")
