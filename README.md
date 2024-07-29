@@ -37,6 +37,7 @@ Welcome to the [blackjack-qlearning](cci:4://c:/Users/Carlos/dev/Repos/blackjack
 
 ## Configuration
 You can adjust the training parameters in the *Agent* class in `blackjack_qlearning.ipynb`:
+
     ```python
     agent = Agent(
         learning_rate=0.1,
