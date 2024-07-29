@@ -1,6 +1,6 @@
 # Blackjack with Q-Learning
 
-![Blackjack](https://example.com/blackjack-banner.png)
+![Blackjack](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.crownperth.com.au%2Fcasino%2Ftable-games%2Fblackjack&psig=AOvVaw0LxiEB222d-EFcv3By4jiM&ust=1722358201248000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPjZ-rvazIcDFQAAAAAdAAAAABAx)
 
 ## Introduction
 Welcome to the [blackjack-qlearning](cci:4://c:/Users/Carlos/dev/Repos/blackjack-qlearning/README.md:0:0-2:0) project! This repository contains an implementation of a Blackjack game using Q-learning, a type of reinforcement learning. The goal is to train an agent to play Blackjack optimally.
