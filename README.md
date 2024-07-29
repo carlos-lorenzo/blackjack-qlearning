@@ -42,7 +42,9 @@ You can adjust the training parameters in the `Agent` class in `blackjack_qlearn
 agent = Agent(
     learning_rate=0.1,
     discount_factor=0.9,
-    epsilon_greedy=0.1
+    epsilon_greedy=0.1,
+    training_epochs=100000,
+    benchmark_epochs=1000
 )
 ```
 
