@@ -36,15 +36,15 @@ Welcome to the [blackjack-qlearning](cci:4://c:/Users/Carlos/dev/Repos/blackjack
 2. Run the cells to train the agent and visualize the results
 
 ## Configuration
-You can adjust the training parameters in the *Agent* class in `blackjack_qlearning.ipynb`:
-
-    ```python
+You can adjust the training parameters in the `Agent` class in `blackjack_qlearning.ipynb`:
+    ```py
     agent = Agent(
         learning_rate=0.1,
         discount_factor=0.9,
         epsilon_greedy
     )
     ```
+
 
 ## Project Structure
 
@@ -55,7 +55,6 @@ The project structure is organized as follows:
   - `deck.py`: Class representing a deck of cards.
   - `hand.py`: Class representing a hand of cards.
   - `player.py`: Class representing a player in the game.
-  - `simulation.py`: Functions for running simulations of the game.
 - `blackjack_qlearning.ipynb`: Jupyter Notebook for training the Q-learning agent and visualizing the results.
 - `LICENSE`: MIT license file.
 - `README.md`: This file.
